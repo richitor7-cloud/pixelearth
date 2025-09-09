@@ -85,7 +85,7 @@
     storageBucket: "earth-dd5c6.firebasestorage.app",
     messagingSenderId: "118865590559",
     appId: "1:118865590559:web:87123635d50db48934d82a"
-  }; "demo.firebaseapp.com", projectId: "demo" };
+  };
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-pixel-map';
         
         const PIXEL_SIZE_METERS = 20;
@@ -189,7 +189,10 @@
         function listenForPixels() {
             const pixelsCollection = collection(db, `/artifacts/${appId}/public/data/pixels`);
             onSnapshot(pixelsCollection, (snapshot) => {
+                // **BUG FIX**: Hide the loader as soon as we get the first response from the server,
+                // even if the snapshot is empty. This prevents getting stuck on the loading screen.
                 loader.style.display = 'none';
+                
                 snapshot.docChanges().forEach((change) => {
                     const pixelId = change.doc.id;
                     if (change.type === "removed") {
@@ -430,4 +433,6 @@
     </script>
 </body>
 </html>
+
+
 
